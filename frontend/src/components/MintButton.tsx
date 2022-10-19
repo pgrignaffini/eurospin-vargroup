@@ -11,7 +11,6 @@ function MintButton({ image, name, description, category }: NFTItem) {
 
     const { address } = useAccount()
     const [minted, setMinted] = React.useState<boolean>(false)
-    const [isMinting, setIsMinting] = React.useState<boolean>(false)
 
     const uploadMetadataToIPFS = async () => {
         const nftJSON = {
@@ -37,9 +36,6 @@ function MintButton({ image, name, description, category }: NFTItem) {
         addressOrName: nftAddress,
         contractInterface: nftContractABI,
         functionName: 'mintNFT',
-        onMutate() {
-            setIsMinting(true)
-        }
     })
 
     const { isLoading: isLoadingTx } = useWaitForTransaction({
@@ -50,7 +46,7 @@ function MintButton({ image, name, description, category }: NFTItem) {
     })
 
     return (
-        <div className='flex flex-col space-y-2 items-center justify-center'>
+        <div className='w-full flex flex-col space-y-2 items-center justify-center'>
             {/* {data &&
                 <TxHash hash={data?.hash} />
             } */}
