@@ -1,7 +1,5 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { trpc } from "../utils/trpc";
 import Menu from "../components/Menu";
 import Banner from "../components/Banner";
 import ItemCard from "../components/ItemCard";
@@ -9,6 +7,7 @@ import dynamic from 'next/dynamic'
 import Footer from "../components/Footer";
 import React from "react";
 import type { Item } from "../types/types";
+import NFT from "../components/NFT";
 
 const Header = dynamic(
   () => import('../components/Header'),
@@ -18,6 +17,29 @@ const Header = dynamic(
 const Home: NextPage = () => {
 
   const [cartItems, setCartItems] = React.useState(Array<Item>());
+  const [selectedTab, setSelectedTab] = React.useState('home');
+  const [selectedNFT, setSelectedNFT] = React.useState<Item | null>(null);
+
+  const NFTs = [
+    {
+      image: '/zucca.png',
+      name: 'Zuccone',
+      description: 'This is the first NFT',
+      price: 10
+    },
+    {
+      image: '/meccanico.png',
+      name: 'Meccanico',
+      description: 'This is the second NFT',
+      price: 15
+    },
+    {
+      image: '/sportivo.png',
+      name: 'Sportivo',
+      description: 'This is the third NFT',
+      price: 20
+    },
+  ]
 
   const cartModal = (
     <>
@@ -62,6 +84,30 @@ const Home: NextPage = () => {
     </>
   )
 
+  const nftModal = (
+    <>
+      <input type="checkbox" id="nft-modal" className="modal-toggle" />
+      <div className="modal ">
+        <div className="modal-box relative bg-background">
+          <label htmlFor="nft-modal" className="btn btn-accent btn-sm btn-circle absolute right-2 top-2">✕</label>
+          <div className="grid grid-cols-2 gap-8">
+            <img src={selectedNFT?.image} alt={selectedNFT?.name} className='w-full h-full object-contain' />
+            <div className='flex flex-col space-y-4 items-center justify-center'>
+              <p className='font-poppins text-2xl text-primary'>{selectedNFT?.name}</p>
+              <p className='font-poppins text-md text-gray-700 italic'>{selectedNFT?.description}</p>
+              <div className='flex space-x-4'>
+                <p className='font-poppins text-xl text-primary'>{selectedNFT?.price}€</p>
+                <img src="/logo.png" className="w-8 h-8 ring-2 ring-accent rounded-md" />
+              </div>
+              <button className="btn btn-primary font-poppins text-xl">Acquista</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+
+
   return (
     <>
       <Head>
@@ -72,17 +118,36 @@ const Home: NextPage = () => {
       <Header cartItems={cartItems} />
       <main className="bg-background min-h-screen">
         {cartModal}
-        <Menu />
-        <Banner />
-        <div className="mt-6">
-          <p className="font-poppins uppercase text-lg flex justify-center">LE MIGLIORI OCCASIONI LE TROVI SOLO NELL'ONLINE STORE EUROSPIN</p>
-        </div>
-        <div className="w-3/4 mx-auto p-6 flex items-center space-x-4">
-          <ItemCard image="/ariete.jpg" name="Ariete Piastra elettrica" price={42.99} setCartItems={setCartItems} />
-          <ItemCard image="/asciugatrice.jpg" name="Hoover asciugatrice 10kg" price={449.99} setCartItems={setCartItems} />
-          <ItemCard image="/borsa-frigo.jpg" name="Borsa frigo 10L termica" price={9.99} setCartItems={setCartItems} />
-          <ItemCard image="/majestic.jpg" name="Majestic telefono skid" price={39.99} setCartItems={setCartItems} />
-        </div>
+        <Menu setSelectedTab={setSelectedTab} />
+        {selectedTab === 'home' && (
+          <>
+            <Banner />
+            <div className="mt-6">
+              <p className="font-poppins uppercase text-lg flex justify-center">LE MIGLIORI OCCASIONI LE TROVI SOLO NELL'ONLINE STORE EUROSPIN</p>
+            </div>
+            <div className="w-3/4 mx-auto p-6 flex items-center space-x-4">
+              <ItemCard image="/ariete.jpg" name="Ariete Piastra elettrica" price={42.99} setCartItems={setCartItems} />
+              <ItemCard image="/asciugatrice.jpg" name="Hoover asciugatrice 10kg" price={449.99} setCartItems={setCartItems} />
+              <ItemCard image="/borsa-frigo.jpg" name="Borsa frigo 10L termica" price={9.99} setCartItems={setCartItems} />
+              <ItemCard image="/majestic.jpg" name="Majestic telefono skid" price={39.99} setCartItems={setCartItems} />
+            </div>
+          </>)}
+        {nftModal}
+        {
+          selectedTab === 'marketplace' && (
+            <div className="w-3/4 mx-auto mt-8">
+              <div className="grid grid-cols-4 gap-12">
+                {
+                  NFTs.map((item, index) => (
+                    <div className="col-span-1" key={index} onClick={() => setSelectedNFT(item)}>
+                      <NFT image={item.image} name={item.name} price={item.price} description={item.description} />
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          )
+        }
       </main>
       <Footer />
 
