@@ -1,7 +1,8 @@
 import React from 'react'
-import { UserIcon, HeartIcon, ShoppingCartIcon, SearchIcon } from "@heroicons/react/outline"
+import { UserIcon, BookOpenIcon, ShoppingCartIcon, SearchIcon } from "@heroicons/react/outline"
 import type { Item } from "../types/types"
 import dynamic from 'next/dynamic'
+import { useAccount } from 'wagmi'
 
 const ConnectWallet = dynamic(
     () => import('../components/ConnectWallet'),
@@ -16,6 +17,8 @@ type Props = {
 
 function Header({ cartItems, setSelectedTab }: Props) {
 
+    const { isConnected } = useAccount()
+
     const total = (cartItems.reduce((acc, item) => acc + item.price, 0)).toFixed(2)
 
     return (
@@ -26,8 +29,8 @@ function Header({ cartItems, setSelectedTab }: Props) {
                     className='w-1/3 h-12 p-3 rounded-lg border-2 border-gray-300 text-sm 
             placeholder:font-poppins placeholder:text-black outline-none' placeholder='Cosa stai cercando?' />
                 <div className='flex items-center space-x-4'>
-                    <UserIcon className='h-8 w-8 text-white cursor-pointer' onClick={() => setSelectedTab('your-nfts')} />
-                    <HeartIcon className='h-8 w-8  text-white' />
+                    {isConnected && <UserIcon className='h-8 w-8 text-white cursor-pointer' onClick={() => setSelectedTab('your-nfts')} />}
+                    <BookOpenIcon className='h-8 w-8 cursor-pointer text-white' onClick={() => setSelectedTab('catalogue')} />
                     <div className='relative'>
                         <label htmlFor="cart-modal" className="cursor-pointer" >
                             <ShoppingCartIcon className='h-8 w-8 cursor-pointer text-white' />

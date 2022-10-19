@@ -15,6 +15,7 @@ import { NFTs } from "../utils/constants";
 import MintButton from "../components/MintButton";
 import YourNFTs from "../components/YourNFTs";
 import { OwnedNft } from "alchemy-sdk";
+import Catalogue from "../components/Catalogue";
 
 const Header = dynamic(
   () => import('../components/Header'),
@@ -32,6 +33,7 @@ const Home: NextPage = () => {
   const [selectedTab, setSelectedTab] = React.useState('home');
   const [selectedNFT, setSelectedNFT] = React.useState<NFTItem | null>(null);
   const [selectedNFTInfo, setSelectedNFTInfo] = React.useState<OwnedNft | null>(null);
+  const [selectedCatalogueItem, setSelectedCatalogueItem] = React.useState<Item | null>(null);
 
   const { address } = useAccount();
 
@@ -127,8 +129,7 @@ const Home: NextPage = () => {
                 <p className='font-poppins text-xl text-primary'>{selectedNFT?.price}</p>
                 <img src="/logo.png" className="w-8 h-8 ring-2 ring-accent rounded-md" />
               </div>
-              {selectedNFT && <MintButton image={selectedNFT.image} name={selectedNFT.name}
-                description={selectedNFT.description} category={selectedNFT.category} price={selectedNFT.price} />}
+              {selectedNFT && <MintButton item={selectedNFT} />}
             </div>
           </div>
         </div>
@@ -147,6 +148,30 @@ const Home: NextPage = () => {
             <div className='flex flex-col space-y-4 items-center justify-center'>
               <p className='font-poppins text-2xl text-primary'>{selectedNFTInfo?.rawMetadata?.name}</p>
               <p className='font-poppins text-md text-gray-700 italic'>{selectedNFTInfo?.rawMetadata?.description}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+
+  const itemModal = (
+    <>
+      <input type="checkbox" id="item-modal" className="modal-toggle" />
+      <div className="modal ">
+        <div className="modal-box relative bg-background">
+          <label htmlFor="item-modal" className="btn btn-accent btn-sm btn-circle absolute right-2 top-2">✕</label>
+          <div className="grid grid-cols-2 gap-8">
+            <img src={selectedCatalogueItem?.image} alt={selectedCatalogueItem?.name} className='w-full h-full object-contain' />
+            <div className='flex flex-col space-y-4 items-center justify-center'>
+              <p className='font-poppins text-2xl text-primary'>{selectedCatalogueItem?.name}</p>
+              <p className='font-poppins text-md text-gray-700 italic'>{selectedCatalogueItem?.description}</p>
+              <div className='flex items-center space-x-4'>
+                <p className='font-poppins text-xl text-primary'>{selectedCatalogueItem?.price}</p>
+                <img src="/logo.png" className="w-8 h-8 ring-2 ring-accent rounded-md" />
+              </div>
+              {/* bisogna agganciare il bottone che brucia i token */}
+              {selectedCatalogueItem && <MintButton item={selectedCatalogueItem} />}
             </div>
           </div>
         </div>
@@ -189,6 +214,7 @@ const Home: NextPage = () => {
         {
           selectedTab === 'marketplace' && (
             <div className="w-3/4 mx-auto mt-8">
+              <p className="text-2xl my-8 font-poppins font-semibold text-primary text-center">Dai un'occhiata ai nostri sconti intelligenti</p>
               <div className="grid grid-cols-4 gap-12">
                 {
                   NFTs.map((item, index) => (
@@ -206,8 +232,17 @@ const Home: NextPage = () => {
         {nftInfoModal}
         {
           selectedTab === 'your-nfts' && (
-            <div className="w-3/4 mx-auto mt-8 p-5">
+            <div className="w-3/4 mx-auto pb-8">
+              <p className="text-2xl my-8 font-poppins font-semibold text-primary text-center">Ecco i tuoi sconti disponibili</p>
               <YourNFTs setSelectedNFTInfo={setSelectedNFTInfo} />
+            </div>
+          )
+        }
+        {
+          selectedTab === 'catalogue' && (
+            <div className="w-3/4 mx-auto pb-8">
+              <p className="text-2xl my-8 font-poppins font-semibold text-primary text-center">Utilizza i tuoi punti fedeltà per ricevere fantastici premi</p>
+              <Catalogue setSelectedCatalogueItem={setSelectedCatalogueItem} />
             </div>
           )
         }

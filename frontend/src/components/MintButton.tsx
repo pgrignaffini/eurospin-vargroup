@@ -5,14 +5,22 @@ import { nftAddress } from '../utils/constants';
 import { uploadJSONToIPFS } from "../utils/pinata"
 import TxHash from './TxHash';
 import { Ring } from '@uiball/loaders'
-import { NFTItem } from '../types/types';
+import { NFTItem, Item } from '../types/types';
 
-function MintButton({ image, name, description, category }: NFTItem) {
+type Props = {
+    item: NFTItem | Item
+}
+
+function MintButton({ item }: Props) {
 
     const { address } = useAccount()
     const [minted, setMinted] = React.useState<boolean>(false)
 
     const uploadMetadataToIPFS = async () => {
+        const name = item?.name
+        const description = item?.description
+        const image = item?.image
+        const category = item?.category
         const nftJSON = {
             name,
             description,

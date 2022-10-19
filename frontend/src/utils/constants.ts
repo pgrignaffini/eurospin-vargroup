@@ -73,3 +73,47 @@ export const NFTs = [
         discount: '0.1',
     },
 ]
+
+export const CatalogueList = [
+    {
+        image: '/diffusore.jpg',
+        name: 'Diffusore per ambienti',
+        price: 10,
+        description: '',
+        category: 'elettrodomestici',
+    },
+    {
+        image: '/forno.jpg',
+        name: 'Fornetto elettrico',
+        price: 8,
+        description: '',
+        category: 'elettrodomestici',
+    },
+    {
+        image: '/mixer.jpg',
+        name: 'Mixer',
+        price: 10,
+        description: '',
+        category: 'elettrodomestici',
+    },
+    {
+        image: '/spremiagrumi.jpg',
+        name: 'Spremiagrumi',
+        price: 5,
+        category: 'elettrodomestici',
+    },
+    {
+        image: '/termoventilatore.jpg',
+        name: 'Termoventilatore',
+        price: 7,
+        description: '',
+        category: 'elettrodomestici',
+    },
+    {
+        image: '/tv.jpg',
+        name: 'Televisore',
+        price: 30,
+        description: '',
+        category: 'elettronica',
+    },
+]
