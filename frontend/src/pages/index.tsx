@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Menu from "../components/Menu";
 import Banner from "../components/Banner";
 import ItemCard from "../components/ItemCard";
 import dynamic from 'next/dynamic'
@@ -8,9 +7,19 @@ import Footer from "../components/Footer";
 import React from "react";
 import type { Item } from "../types/types";
 import NFT from "../components/NFT";
+import { usePrepareContractWrite, useContractWrite, useAccount, useWaitForTransaction } from 'wagmi'
+import SpinTokenABI from "../../../contracts/abi/SpinToken.json"
+import { tokenAddress } from "../utils/constants";
+import { Ring } from "@uiball/loaders"
+
 
 const Header = dynamic(
   () => import('../components/Header'),
+  { ssr: false }
+)
+
+const Menu = dynamic(
+  () => import('../components/Menu'),
   { ssr: false }
 )
 
@@ -19,6 +28,23 @@ const Home: NextPage = () => {
   const [cartItems, setCartItems] = React.useState(Array<Item>());
   const [selectedTab, setSelectedTab] = React.useState('home');
   const [selectedNFT, setSelectedNFT] = React.useState<Item | null>(null);
+  const { address } = useAccount();
+
+  const total = (cartItems.reduce((acc, item) => acc + item.price, 0)).toFixed(2)
+  const cashback = (parseInt(total) / 10).toFixed(0) ?? 0
+
+  const { config } = usePrepareContractWrite({
+    addressOrName: tokenAddress,
+    contractInterface: SpinTokenABI,
+    functionName: 'transferTokens',
+    args: [address, cashback],
+  })
+
+  const { data, isLoading, write: sendCashback } = useContractWrite(config)
+
+  const { data: txData, isError, isSuccess, isLoading: isLoadingTx } = useWaitForTransaction({
+    hash: data?.hash,
+  })
 
   const NFTs = [
     {
@@ -45,16 +71,16 @@ const Home: NextPage = () => {
     <>
       <input type="checkbox" id="cart-modal" className="modal-toggle" />
       <div className="modal">
-        <div className="modal-box relative">
-          <label htmlFor="cart-modal" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+        <div className="modal-box relative bg-background">
+          <label htmlFor="cart-modal" className="btn btn-primary btn-sm btn-circle absolute right-2 top-2">✕</label>
           {
             cartItems.length === 0 ? (
-              <p className="font-poppins text-md">Your cart is empty</p>
+              <p className="font-poppins text-md text-primary">Your cart is empty</p>
             ) : (
               <div className='flex flex-col'>
                 <div className='flex justify-between items-center'>
-                  <p className='font-poppins text-2xl'>Your Cart</p>
-                  <p className='font-poppins text-2xl'>{cartItems.length} items</p>
+                  <p className='font-poppins text-2xl text-primary'>Your Cart</p>
+                  <p className='font-poppins text-2xl text-primary'>{cartItems.length} items</p>
                 </div>
                 <div className='flex flex-col space-y-4 mt-4'>
                   {
@@ -63,8 +89,8 @@ const Home: NextPage = () => {
                         <div className='flex items-center'>
                           <img src={item.image} alt={item.name} className='w-20 h-20 object-contain' />
                           <div className='flex flex-col ml-4'>
-                            <p className='font-poppins text-md'>{item.name}</p>
-                            <p className='font-poppins text-md'>{item.price}€</p>
+                            <p className='font-poppins text-md text-primary'>{item.name}</p>
+                            <p className='font-poppins text-md text-primary'>{item.price}€</p>
                           </div>
                         </div>
                         <button className='font-poppins text-md bg-primary text-white rounded-md p-2'
@@ -77,6 +103,24 @@ const Home: NextPage = () => {
                     ))
                   }
                 </div>
+                <div className="mt-8 flex flex-col space-y-4 items-center">
+                  <p className="text-center font-poppins text-xl text-primary">Total: {total}€</p>
+                  <div className="flex items-center space-x-2">
+                    <p className="text-center font-poppins text-xl text-primary">Punti spesa: {cashback}</p>
+                    <img src="/logo.png" className="w-6 h-6 ring-2 ring-accent rounded-md" />
+                  </div>
+                </div>
+                {!isSuccess ? <button className="btn mt-4 btn-primary font-poppins text-xl" onClick={() => {
+                  sendCashback?.()
+                }}>
+                  <div className="flex space-x-8 items-center">
+                    <p className="flex-1 font-poppins text-md">{isLoading || isLoadingTx ? "Pagamento in corso" : "Paga"}</p>
+                    {isLoading || isLoadingTx && <Ring size={30} color="#ffffff" />}
+                  </div>
+                </button> :
+                  <div className="p-2 mt-4 bg-primary rounded-md">
+                    <p className="font-poppins text-xl text-center text-white">Pagato</p>
+                  </div>}
               </div>
             )}
         </div>
@@ -95,7 +139,7 @@ const Home: NextPage = () => {
             <div className='flex flex-col space-y-4 items-center justify-center'>
               <p className='font-poppins text-2xl text-primary'>{selectedNFT?.name}</p>
               <p className='font-poppins text-md text-gray-700 italic'>{selectedNFT?.description}</p>
-              <div className='flex space-x-4'>
+              <div className='flex items-center space-x-4'>
                 <p className='font-poppins text-xl text-primary'>{selectedNFT?.price}€</p>
                 <img src="/logo.png" className="w-8 h-8 ring-2 ring-accent rounded-md" />
               </div>
@@ -150,7 +194,6 @@ const Home: NextPage = () => {
         }
       </main>
       <Footer />
-
     </>
   );
 };

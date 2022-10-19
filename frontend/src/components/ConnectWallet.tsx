@@ -1,6 +1,6 @@
 import { useAccount, useConnect, useDisconnect, useBalance } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
-import makeBlockie from "ethereum-blockies-base64"
+import { tokenAddress } from '../utils/constants'
 import React from 'react'
 
 function ConnectWallet() {
@@ -11,7 +11,7 @@ function ConnectWallet() {
     const { disconnect } = useDisconnect()
     const { data: balance } = useBalance({
         addressOrName: address,
-        token: '0x0000000000000000000000000000000000001010',
+        token: tokenAddress,
         watch: true,
     })
 

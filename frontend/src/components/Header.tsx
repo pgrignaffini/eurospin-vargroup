@@ -1,7 +1,13 @@
 import React from 'react'
 import { UserIcon, HeartIcon, ShoppingCartIcon, SearchIcon } from "@heroicons/react/outline"
 import type { Item } from "../types/types"
-import ConnectWallet from './ConnectWallet'
+import dynamic from 'next/dynamic'
+
+const ConnectWallet = dynamic(
+    () => import('../components/ConnectWallet'),
+    { ssr: false }
+)
+
 
 type Props = {
     cartItems: Item[],
