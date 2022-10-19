@@ -51,19 +51,22 @@ const Home: NextPage = () => {
       image: '/zucca.png',
       name: 'Zuccone',
       description: 'This is the first NFT',
-      price: 10
+      price: 10,
+      category: 'halloween'
     },
     {
       image: '/meccanico.png',
       name: 'Meccanico',
       description: 'This is the second NFT',
-      price: 15
+      price: 15,
+      category: 'fai-da-te'
     },
     {
       image: '/sportivo.png',
       name: 'Sportivo',
       description: 'This is the third NFT',
-      price: 20
+      price: 20,
+      category: 'sport'
     },
   ]
 
@@ -75,12 +78,12 @@ const Home: NextPage = () => {
           <label htmlFor="cart-modal" className="btn btn-primary btn-sm btn-circle absolute right-2 top-2">✕</label>
           {
             cartItems.length === 0 ? (
-              <p className="font-poppins text-md text-primary">Your cart is empty</p>
+              <p className="font-poppins text-md text-primary">Il tuo carrello è vuoto</p>
             ) : (
               <div className='flex flex-col'>
                 <div className='flex justify-between items-center'>
-                  <p className='font-poppins text-2xl text-primary'>Your Cart</p>
-                  <p className='font-poppins text-2xl text-primary'>{cartItems.length} items</p>
+                  <p className='font-poppins text-2xl text-primary'>Carrello</p>
+                  <p className='font-poppins text-2xl text-primary'>{cartItems.length} {cartItems.length == 1 ? "elemento" : "elementi"}</p>
                 </div>
                 <div className='flex flex-col space-y-4 mt-4'>
                   {
@@ -97,14 +100,14 @@ const Home: NextPage = () => {
                           onClick={() => {
                             setCartItems((prev) => prev.filter((_, i) => i !== index))
                           }}>
-                          Remove
+                          Rimuovi
                         </button>
                       </div>
                     ))
                   }
                 </div>
                 <div className="mt-8 flex flex-col space-y-4 items-center">
-                  <p className="text-center font-poppins text-xl text-primary">Total: {total}€</p>
+                  <p className="text-center font-poppins text-xl text-primary">Totale: {total}€</p>
                   <div className="flex items-center space-x-2">
                     <p className="text-center font-poppins text-xl text-primary">Punti spesa: {cashback}</p>
                     <img src="/logo.png" className="w-6 h-6 ring-2 ring-accent rounded-md" />
@@ -170,10 +173,16 @@ const Home: NextPage = () => {
               <p className="font-poppins uppercase text-lg flex justify-center">LE MIGLIORI OCCASIONI LE TROVI SOLO NELL'ONLINE STORE EUROSPIN</p>
             </div>
             <div className="w-3/4 mx-auto p-6 flex items-center space-x-4">
-              <ItemCard image="/ariete.jpg" name="Ariete Piastra elettrica" price={42.99} setCartItems={setCartItems} />
-              <ItemCard image="/asciugatrice.jpg" name="Hoover asciugatrice 10kg" price={449.99} setCartItems={setCartItems} />
-              <ItemCard image="/borsa-frigo.jpg" name="Borsa frigo 10L termica" price={9.99} setCartItems={setCartItems} />
-              <ItemCard image="/majestic.jpg" name="Majestic telefono skid" price={39.99} setCartItems={setCartItems} />
+              <ItemCard image="/ariete.jpg" category="elettrodomestici" name="Ariete Piastra elettrica" price={42.99} setCartItems={setCartItems} />
+              <ItemCard image="/asciugatrice.jpg" category="elettrodomestici" name="Hoover asciugatrice 10kg" price={449.99} setCartItems={setCartItems} />
+              <ItemCard image="/borsa-frigo.jpg" category="tempo-libero" name="Borsa frigo 10L termica" price={9.99} setCartItems={setCartItems} />
+              <ItemCard image="/majestic.jpg" category="elettronica" name="Majestic telefono skid" price={39.99} setCartItems={setCartItems} />
+            </div>
+            <div className="w-3/4 mx-auto p-6 flex items-center space-x-4">
+              <ItemCard image="/parigi.jpeg" category="viaggi" name="10 giorni a Parigi (x2)" price={999.99} setCartItems={setCartItems} />
+              <ItemCard image="/compressore.webp" category="fai-da-te" name="Compressore 1.5 KW" price={119.99} setCartItems={setCartItems} />
+              <ItemCard image="/penisola.jpg" category="arredamento" name="Penisola da cucina" price={149.99} setCartItems={setCartItems} />
+              <ItemCard image="/carta.jpg" category="arredamento" name="Porta carta igienica" price={14.99} setCartItems={setCartItems} />
             </div>
           </>)}
         {nftModal}

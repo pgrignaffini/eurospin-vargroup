@@ -10,9 +10,9 @@ function ItemCard({ image, name, price, setCartItems }: Props) {
     const [added, setAdded] = React.useState(false)
 
     return (
-        <div className='group relative flex cursor-pointer'>
+        <div className='group relative flex cursor-pointer '>
             <div className='flex flex-col justify-center'>
-                <img src={image} alt={name} className='w-80 h-80 object-contain' />
+                <img src={image} alt={name} className='w-80 h-80 object-contain bg-white' />
                 <p className='font-poppins font-semibold text-center mt-4 text-md'>{name}</p>
                 <p className='font-poppins text-4xl mt-4 text-primary text-center'>{price}€</p>
             </div>
@@ -24,9 +24,9 @@ function ItemCard({ image, name, price, setCartItems }: Props) {
                             setCartItems((prev) => [...prev, { image, name, price }])
                             setAdded(true)
                         }}>
-                        Add to Cart
+                        Aggiungi al carrello
                     </button> :
-                        <div className='p-3 font-poppins text-md bg-accent text-white rounded-md'>Added to Cart</div>
+                        <div className='p-3 font-poppins text-md bg-accent text-white rounded-md'>Aggiunto</div>
                     }
                 </div>
             </div>
