@@ -5,10 +5,15 @@ import { trpc } from "../utils/trpc";
 import Menu from "../components/Menu";
 import Banner from "../components/Banner";
 import ItemCard from "../components/ItemCard";
-import Header from "../components/Header";
+import dynamic from 'next/dynamic'
 import Footer from "../components/Footer";
 import React from "react";
 import type { Item } from "../types/types";
+
+const Header = dynamic(
+  () => import('../components/Header'),
+  { ssr: false }
+)
 
 const Home: NextPage = () => {
 

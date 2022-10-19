@@ -1,6 +1,7 @@
 import React from 'react'
 import { UserIcon, HeartIcon, ShoppingCartIcon, SearchIcon } from "@heroicons/react/outline"
 import type { Item } from "../types/types"
+import ConnectWallet from './ConnectWallet'
 
 type Props = {
     cartItems: Item[],
@@ -30,6 +31,7 @@ function Header({ cartItems }: Props) {
                     </div>
                     <p className='font-poppins text-md text-white'>{total}€</p>
                 </div>
+                <ConnectWallet />
             </div>
         </div>
     )
