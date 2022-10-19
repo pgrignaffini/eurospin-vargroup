@@ -1,7 +1,7 @@
 import React from 'react'
-import type { Item } from "../types/types"
+import type { NFTItem } from "../types/types"
 
-function NFT({ image, name, description, price }: Item) {
+function NFT({ image, name, price }: NFTItem) {
     return (
         <label htmlFor="nft-modal" className="cursor-pointer" >
             <div className='ring-4 shadow-xl cursor-pointer ring-accent p-2 rounded-md flex flex-col space-y-4 justify-center items-center'>

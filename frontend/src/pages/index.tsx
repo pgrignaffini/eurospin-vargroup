@@ -5,13 +5,14 @@ import ItemCard from "../components/ItemCard";
 import dynamic from 'next/dynamic'
 import Footer from "../components/Footer";
 import React from "react";
-import type { Item } from "../types/types";
+import type { Item, NFTItem } from "../types/types";
 import NFT from "../components/NFT";
 import { usePrepareContractWrite, useContractWrite, useAccount, useWaitForTransaction } from 'wagmi'
 import SpinTokenABI from "../../../contracts/abi/SpinToken.json"
 import { tokenAddress } from "../utils/constants";
 import { Ring } from "@uiball/loaders"
-
+import { NFTs } from "../utils/constants";
+import MintButton from "../components/MintButton";
 
 const Header = dynamic(
   () => import('../components/Header'),
@@ -27,7 +28,7 @@ const Home: NextPage = () => {
 
   const [cartItems, setCartItems] = React.useState(Array<Item>());
   const [selectedTab, setSelectedTab] = React.useState('home');
-  const [selectedNFT, setSelectedNFT] = React.useState<Item | null>(null);
+  const [selectedNFT, setSelectedNFT] = React.useState<NFTItem | null>(null);
   const { address } = useAccount();
 
   const total = (cartItems.reduce((acc, item) => acc + item.price, 0)).toFixed(2)
@@ -42,33 +43,9 @@ const Home: NextPage = () => {
 
   const { data, isLoading, write: sendCashback } = useContractWrite(config)
 
-  const { data: txData, isError, isSuccess, isLoading: isLoadingTx } = useWaitForTransaction({
+  const { isSuccess, isLoading: isLoadingTx } = useWaitForTransaction({
     hash: data?.hash,
   })
-
-  const NFTs = [
-    {
-      image: '/zucca.png',
-      name: 'Zuccone',
-      description: 'This is the first NFT',
-      price: 10,
-      category: 'halloween'
-    },
-    {
-      image: '/meccanico.png',
-      name: 'Meccanico',
-      description: 'This is the second NFT',
-      price: 15,
-      category: 'fai-da-te'
-    },
-    {
-      image: '/sportivo.png',
-      name: 'Sportivo',
-      description: 'This is the third NFT',
-      price: 20,
-      category: 'sport'
-    },
-  ]
 
   const cartModal = (
     <>
@@ -146,7 +123,8 @@ const Home: NextPage = () => {
                 <p className='font-poppins text-xl text-primary'>{selectedNFT?.price}€</p>
                 <img src="/logo.png" className="w-8 h-8 ring-2 ring-accent rounded-md" />
               </div>
-              <button className="btn btn-primary font-poppins text-xl">Acquista</button>
+              {selectedNFT && <MintButton image={selectedNFT.image} name={selectedNFT.name}
+                description={selectedNFT.description} category={selectedNFT.category} price={selectedNFT.price} />}
             </div>
           </div>
         </div>

@@ -1,21 +1,13 @@
 import React from 'react'
-import SolidButton from "../components/SolidButton";
 import nftContractABI from "../../../contracts/abi/nft.json"
-import { useContractWrite, useContractEvent, useAccount } from 'wagmi'
+import { useContractWrite, useAccount, useWaitForTransaction } from 'wagmi'
 import { nftAddress } from '../utils/constants';
 import { uploadJSONToIPFS } from "../utils/pinata"
 import TxHash from './TxHash';
+import { Ring } from '@uiball/loaders'
+import { NFTItem } from '../types/types';
 
-type Props = {
-    image: string;
-    name: string;
-    description?: string;
-    category?: string;
-    discount?: string;
-    type?: string;
-}
-
-function MintButton({ image, name, description, category }: Props) {
+function MintButton({ image, name, description, category }: NFTItem) {
 
     const { address } = useAccount()
     const [minted, setMinted] = React.useState<boolean>(false)
@@ -40,7 +32,7 @@ function MintButton({ image, name, description, category }: Props) {
         }
     }
 
-    const { write: createToken, data } = useContractWrite({
+    const { write: createToken, data, isLoading } = useContractWrite({
         mode: 'recklesslyUnprepared',
         addressOrName: nftAddress,
         contractInterface: nftContractABI,
@@ -50,17 +42,30 @@ function MintButton({ image, name, description, category }: Props) {
         }
     })
 
+    const { isLoading: isLoadingTx } = useWaitForTransaction({
+        hash: data?.hash,
+        onSuccess() {
+            setMinted(true)
+        }
+    })
+
     return (
         <div className='flex flex-col space-y-2 items-center justify-center'>
-            {data &&
+            {/* {data &&
                 <TxHash hash={data?.hash} />
-            }
-            <SolidButton loading={isMinting} isFinished={minted} text="Mint" onClick={async () => {
+            } */}
+            {!minted ? <button className="btn btn-primary font-poppins text-xl" onClick={async () => {
                 const tokenUri = await uploadMetadataToIPFS()
                 createToken?.({
                     recklesslySetUnpreparedArgs: [address, tokenUri]
                 })
-            }} />
+            }}>
+                <p className="font-poppins text-sm">{isLoading || isLoadingTx ? "Acquisto in corso" : "Acquista"}</p>
+                {isLoading || isLoadingTx && <Ring size={30} color="#ffffff" />}
+            </button> :
+                <div className="p-2 mt-4 bg-primary rounded-md">
+                    <p className="font-poppins text-xl text-center text-white">Acquistato</p>
+                </div>}
         </div>
     )
 }

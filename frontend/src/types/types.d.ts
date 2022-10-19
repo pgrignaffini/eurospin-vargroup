@@ -5,3 +5,13 @@ export interface Item {
     description?: string
     category?: string
 }
+
+export interface NFTItem {
+    image: string
+    name: string
+    description: string
+    price: string
+    type?: string
+    category?: string
+    discount?: string
+}
