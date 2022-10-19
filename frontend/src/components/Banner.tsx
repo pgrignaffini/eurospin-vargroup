@@ -1,8 +1,6 @@
 import React from 'react'
 
-type Props = {}
-
-function Banner({ }: Props) {
+function Banner() {
     return (
         <div>
             <img src='/tecnologia.webp' alt='banner' className='w-full h-auto' />

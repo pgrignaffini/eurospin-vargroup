@@ -1,8 +1,6 @@
 import React from 'react'
 
-type Props = {}
-
-function Footer({ }: Props) {
+function Footer() {
     return (
         <div className='bg-primary'>
             <div className='w-2/3 mx-auto flex justify-between items-center h-auto p-5 '>

@@ -170,7 +170,7 @@ const Home: NextPage = () => {
           <>
             <Banner />
             <div className="mt-6">
-              <p className="font-poppins uppercase text-lg flex justify-center">LE MIGLIORI OCCASIONI LE TROVI SOLO NELL'ONLINE STORE EUROSPIN</p>
+              <p className="font-poppins uppercase text-lg flex justify-center">LE MIGLIORI OCCASIONI LE TROVI SOLO NELL&apos;ONLINE STORE EUROSPIN</p>
             </div>
             <div className="w-3/4 mx-auto p-6 flex items-center space-x-4">
               <ItemCard image="/ariete.jpg" category="elettrodomestici" name="Ariete Piastra elettrica" price={42.99} setCartItems={setCartItems} />

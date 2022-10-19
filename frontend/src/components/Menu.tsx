@@ -20,7 +20,7 @@ function Menu({ setSelectedTab }: Props) {
             <p className='font-poppins text-sm text-black cursor-pointer' onClick={() => setSelectedTab('home')}>Fai da te</p>
             <p className='font-poppins text-sm text-black cursor-pointer' onClick={() => setSelectedTab('home')}>Giochi & Bimbo</p>
             <p className='font-poppins text-sm text-black cursor-pointer' onClick={() => setSelectedTab('home')}>Tempo Libero</p>
-            <p className='font-poppins text-sm text-black cursor-pointer' onClick={() => setSelectedTab('home')}>Saldi d'Autunno</p>
+            <p className='font-poppins text-sm text-black cursor-pointer' onClick={() => setSelectedTab('home')}>Saldi d&apos;Autunno</p>
         </div>
     )
 }
