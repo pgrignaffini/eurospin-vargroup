@@ -180,6 +180,12 @@
 		"type": "function"
 	},
 	{
+		"anonymous": false,
+		"inputs": [],
+		"name": "transferOccurred",
+		"type": "event"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
