@@ -4,13 +4,13 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "hardhat/console.sol";
 
 contract MyToken is ERC20 {
-    uint256 constant maxMint = 100 * (10**18);
+    uint256 constant maxMint = 100 ether;
 
     constructor() ERC20("SPIN", "SPIN") {
     }
 
     /// @dev mints a given amount of tokens to the sender
-    function transfer(address _address) public {
-        _mint(_address, maxMint);
+    function transfer(address _address, uint256 _amount) public {
+        _mint(_address, _amount);
     }
 }
