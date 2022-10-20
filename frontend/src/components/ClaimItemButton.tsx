@@ -1,7 +1,7 @@
 
 import React from "react";
 import { usePrepareContractWrite, useContractWrite, useAccount, useWaitForTransaction } from 'wagmi'
-import SpinTokenABI from "../../../contracts/abi/SpinToken.json"
+import SpinTokenABI from "../../../contracts/abi/spintoken.json"
 import { tokenAddress } from "../utils/constants";
 import { Ring } from "@uiball/loaders"
 import { utils } from "ethers"
@@ -22,14 +22,13 @@ function ClaimItemButton({ price }: Props) {
         args: [address, amount],
     })
 
-    const { config: configTransfer } = usePrepareContractWrite({
+    const { write: transferTokens, data, isLoading } = useContractWrite({
+        mode: 'recklesslyUnprepared',
         addressOrName: tokenAddress,
         contractInterface: SpinTokenABI,
         functionName: 'transferFrom',
-        args: [address, tokenAddress, amount],
     })
 
-    const { data, isLoading, write: burnTokens, } = useContractWrite(configTransfer)
     const { writeAsync: approveTokens } = useContractWrite(configApprove)
 
     const { isSuccess, isLoading: isLoadingTx } = useWaitForTransaction({
@@ -40,7 +39,9 @@ function ClaimItemButton({ price }: Props) {
         <>
             {!isSuccess ? <button className="w-fit btn mt-4 btn-primary" onClick={async () => {
                 await approveTokens?.()
-                burnTokens?.()
+                transferTokens?.({
+                    recklesslySetUnpreparedArgs: [address, tokenAddress, amount]
+                })
             }}>
                 <div className="flex space-x-8 items-center">
                     <p className="font-poppins text-md">{isLoading || isLoadingTx ? "Acquisto in corso" : "Acquista"}</p>

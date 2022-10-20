@@ -8,7 +8,7 @@ import React from "react";
 import type { Item, NFTItem } from "../types/types";
 import NFT from "../components/NFT";
 import { usePrepareContractWrite, useContractWrite, useAccount, useWaitForTransaction } from 'wagmi'
-import SpinTokenABI from "../../../contracts/abi/SpinToken.json"
+import SpinTokenABI from "../../../contracts/abi/spintoken.json"
 import { tokenAddress, nftAddress, NFTs } from "../utils/constants";
 import { Ring } from "@uiball/loaders"
 import MintButton from "../components/MintButton";
@@ -44,9 +44,6 @@ const Home: NextPage = () => {
   let total = (cartItems.reduce((acc, item) => acc + item.price, 0)).toFixed(2)
   const [discountPrice, setDiscountPrice] = React.useState('-1')
   const cashback = (parseInt(total) / 10).toFixed(0) ?? 0
-
-  React.useEffect(() => {
-  }, [discountPrice, selectedDiscountItem, selectedDiscount])
 
   const { alchemySdk } = useAppContext()
 
