@@ -83,12 +83,13 @@ const Home: NextPage = () => {
       <input type="checkbox" id="cart-modal" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box relative bg-background">
-          <label htmlFor="cart-modal" className="btn btn-primary btn-sm btn-circle absolute right-2 top-2">✕</label>
+          <label htmlFor="cart-modal" className="btn btn-primary btn-sm btn-circle absolute right-2 top-2"
+            onClick={() => setCartItems([])}>✕</label>
           {
             cartItems.length === 0 ? (
               <p className="font-poppins text-md text-primary">Il tuo carrello è vuoto</p>
             ) : (
-              <div className='flex flex-col'>
+              <div className='flex flex-col py-3'>
                 <div className='flex justify-between items-center'>
                   <p className='font-poppins text-2xl text-primary'>Carrello</p>
                   <p className='font-poppins text-2xl text-primary'>{cartItems.length} {cartItems.length == 1 ? "elemento" : "elementi"}</p>
@@ -128,7 +129,8 @@ const Home: NextPage = () => {
                     <img src="/logo.png" className="w-6 h-6 ring-2 ring-accent rounded-md" />
                   </div>
                 </div>
-                <div className="mt-8 grid grid-cols-5 p-2 h-28 overflow-y-auto gap-4">
+                {nfts && <div className=" font-poppins text-primary mt-8  text-md" >I tuoi NFT:</div>}
+                <div className="grid grid-cols-5 p-2 h-28 overflow-y-auto gap-4">
                   {isLoadingNfts && <Ring size={30} />}
                   {nfts &&
                     nfts.map((nft: OwnedNft, index) => (
@@ -140,7 +142,7 @@ const Home: NextPage = () => {
                       </div>
                     ))}
                 </div>
-                {!isSuccess ? <button className="btn mt-4 btn-primary font-poppins text-xl" onClick={() => {
+                {!isSuccess ? <button className="btn mt-4 btn-primary font-poppins text-xl" onClick={async () => {
                   sendCashback?.()
                 }}>
                   <div className="flex space-x-8 items-center">
