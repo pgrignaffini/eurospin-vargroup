@@ -243,7 +243,7 @@ const Home: NextPage = () => {
               <p className="font-poppins uppercase text-lg flex justify-center">LE MIGLIORI OCCASIONI LE TROVI SOLO NELL&apos;ONLINE STORE EUROSPIN</p>
             </div>
             <div className="w-3/4 mx-auto p-6 flex items-center space-x-4">
-              <ItemCard image="/pomodori.jpeg" category="food" name="Pomodori" price={4.99} setCartItems={setCartItems} />
+              <ItemCard image="/pomodori.jpeg" category="food" name="Pomodori" price={3.99} setCartItems={setCartItems} />
               <ItemCard image="/banane.jpeg" category="food" name="Banane" price={2.99} setCartItems={setCartItems} />
               <ItemCard image="/finocchi.jpeg" category="food" name="Finocchi" price={3.99} setCartItems={setCartItems} />
               <ItemCard image="/kiwi.jpeg" category="food" name="Kiwi" price={3.99} setCartItems={setCartItems} />
