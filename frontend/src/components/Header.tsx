@@ -12,7 +12,7 @@ const ConnectWallet = dynamic(
 
 type Props = {
     cartItems: Item[],
-    setSelectedTab: React.Dispatch<React.SetStateAction<string>>
+    setSelectedTab?: React.Dispatch<React.SetStateAction<string>>
 }
 
 function Header({ cartItems, setSelectedTab }: Props) {
@@ -29,8 +29,8 @@ function Header({ cartItems, setSelectedTab }: Props) {
                     className='w-1/3 h-12 p-3 rounded-lg border-2 border-gray-300 text-sm 
             placeholder:font-poppins placeholder:text-black outline-none' placeholder='Cosa stai cercando?' />
                 <div className='flex items-center space-x-4'>
-                    {isConnected && <UserIcon className='h-8 w-8 text-white cursor-pointer' onClick={() => setSelectedTab('your-nfts')} />}
-                    <BookOpenIcon className='h-8 w-8 cursor-pointer text-white' onClick={() => setSelectedTab('catalogue')} />
+                    {isConnected && <UserIcon className='h-8 w-8 text-white cursor-pointer' onClick={() => setSelectedTab?.('your-nfts')} />}
+                    <BookOpenIcon className='h-8 w-8 cursor-pointer text-white' onClick={() => setSelectedTab?.('catalogue')} />
                     <div className='relative'>
                         <label htmlFor="cart-modal" className="cursor-pointer" >
                             <ShoppingCartIcon className='h-8 w-8 cursor-pointer text-white' />
