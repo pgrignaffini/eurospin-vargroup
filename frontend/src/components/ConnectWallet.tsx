@@ -22,7 +22,7 @@ function ConnectWallet() {
             {
                 isConnected ?
                     <div className='flex space-x-3 items-center' >
-                        <p className='font-pixel text-white'>{displayBalance}</p>
+                        <p className='font-poppins text-accent'>{displayBalance}</p>
                         <img src="/logo.png" className="w-6 h-6 ring-2 ring-accent rounded-md" />
                         <button className='border-2 border-white rounded-xl text-white p-2 text-sm font-pixel' onClick={() => disconnect()}>Disconnect</button>
                     </div>

@@ -9,13 +9,15 @@ import type { Item, NFTItem } from "../types/types";
 import NFT from "../components/NFT";
 import { usePrepareContractWrite, useContractWrite, useAccount, useWaitForTransaction } from 'wagmi'
 import SpinTokenABI from "../../../contracts/abi/SpinToken.json"
-import { tokenAddress } from "../utils/constants";
+import { tokenAddress, nftAddress, NFTs } from "../utils/constants";
 import { Ring } from "@uiball/loaders"
-import { NFTs } from "../utils/constants";
 import MintButton from "../components/MintButton";
 import YourNFTs from "../components/YourNFTs";
 import { OwnedNft } from "alchemy-sdk";
 import Catalogue from "../components/Catalogue";
+import ClaimItemButton from "../components/ClaimItemButton";
+import { useAppContext } from "../context/AppContext";
+import { useQuery } from "react-query";
 
 const Header = dynamic(
   () => import('../components/Header'),
@@ -34,11 +36,37 @@ const Home: NextPage = () => {
   const [selectedNFT, setSelectedNFT] = React.useState<NFTItem | null>(null);
   const [selectedNFTInfo, setSelectedNFTInfo] = React.useState<OwnedNft | null>(null);
   const [selectedCatalogueItem, setSelectedCatalogueItem] = React.useState<Item | null>(null);
+  const [selectedDiscount, setSelectedDiscount] = React.useState<OwnedNft | null>(null)
+  const [selectedDiscountItem, setSelectedDiscountItem] = React.useState<NFTItem | null>(null)
 
   const { address } = useAccount();
 
-  const total = (cartItems.reduce((acc, item) => acc + item.price, 0)).toFixed(2)
+  let total = (cartItems.reduce((acc, item) => acc + item.price, 0)).toFixed(2)
+  const [discountPrice, setDiscountPrice] = React.useState('-1')
   const cashback = (parseInt(total) / 10).toFixed(0) ?? 0
+
+  React.useEffect(() => {
+  }, [discountPrice, selectedDiscountItem, selectedDiscount])
+
+  const { alchemySdk } = useAppContext()
+
+  const getNFTs = async () => {
+    const response = await alchemySdk.nft.getNftsForOwner(address as string)
+    return response?.ownedNfts
+  }
+  const { data: nfts, isLoading: isLoadingNfts } = useQuery(['your-nfts', address], getNFTs, {
+    select: (data: OwnedNft[]) => data?.filter((nft: OwnedNft) =>
+      (nft.contract.address.toUpperCase() === nftAddress.toUpperCase()) && nft.tokenUri
+    )
+  })
+
+  const applyDiscount = () => {
+    const nft = NFTs?.find((nft: NFTItem) => nft.name === selectedDiscount?.rawMetadata?.name)
+    setSelectedDiscountItem(nft as NFTItem)
+    const discount = nft?.discount
+    const discountPrice = (parseFloat(total) - parseFloat(total) * parseFloat(discount as string)).toFixed(2)
+    setDiscountPrice(discountPrice)
+  }
 
   const { config } = usePrepareContractWrite({
     addressOrName: tokenAddress,
@@ -90,11 +118,30 @@ const Home: NextPage = () => {
                   }
                 </div>
                 <div className="mt-8 flex flex-col space-y-4 items-center">
-                  <p className="text-center font-poppins text-xl text-primary">Totale: {total}€</p>
+                  {selectedDiscountItem ?
+                    <div>
+                      <p>Sconto del {parseFloat(selectedDiscountItem?.discount as string) * 100}% applicato </p>
+                      <p className="text-center font-poppins text-xl">Totale: <span className="line-through text-red-500">{total}€</span><span className="text-primary">{" "}{discountPrice}€</span></p>
+                    </div>
+                    :
+                    <p className="text-center font-poppins text-xl text-primary">Totale: {total}€</p>
+                  }
                   <div className="flex items-center space-x-2">
                     <p className="text-center font-poppins text-xl text-primary">Punti spesa: {cashback}</p>
                     <img src="/logo.png" className="w-6 h-6 ring-2 ring-accent rounded-md" />
                   </div>
+                </div>
+                <div className="mt-8 grid grid-cols-5 p-2 h-28 overflow-y-auto gap-4">
+                  {isLoadingNfts && <Ring size={30} />}
+                  {nfts &&
+                    nfts.map((nft: OwnedNft, index) => (
+                      <div key={index} className='cursor-pointer' onClick={() => {
+                        selectedDiscount === nft ? setSelectedDiscount(null) : setSelectedDiscount(nft)
+                        applyDiscount()
+                      }}>
+                        <img className={`h-16 w-auto bg-white object-contain ${selectedDiscount === nft && "ring-4 ring-primary"}`} src={nft?.rawMetadata?.image} alt={nft?.rawMetadata?.name} />
+                      </div>
+                    ))}
                 </div>
                 {!isSuccess ? <button className="btn mt-4 btn-primary font-poppins text-xl" onClick={() => {
                   sendCashback?.()
@@ -170,8 +217,7 @@ const Home: NextPage = () => {
                 <p className='font-poppins text-xl text-primary'>{selectedCatalogueItem?.price}</p>
                 <img src="/logo.png" className="w-8 h-8 ring-2 ring-accent rounded-md" />
               </div>
-              {/* bisogna agganciare il bottone che brucia i token */}
-              {selectedCatalogueItem && <MintButton item={selectedCatalogueItem} />}
+              {selectedCatalogueItem && <ClaimItemButton price={selectedCatalogueItem.price} />}
             </div>
           </div>
         </div>
@@ -234,10 +280,11 @@ const Home: NextPage = () => {
           selectedTab === 'your-nfts' && (
             <div className="w-3/4 mx-auto pb-8">
               <p className="text-2xl my-8 font-poppins font-semibold text-primary text-center">Ecco i tuoi sconti disponibili</p>
-              <YourNFTs setSelectedNFTInfo={setSelectedNFTInfo} />
+              {nfts && <YourNFTs nfts={nfts} setSelectedNFTInfo={setSelectedNFTInfo} />}
             </div>
           )
         }
+        {itemModal}
         {
           selectedTab === 'catalogue' && (
             <div className="w-3/4 mx-auto pb-8">
