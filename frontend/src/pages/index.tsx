@@ -243,16 +243,16 @@ const Home: NextPage = () => {
               <p className="font-poppins uppercase text-lg flex justify-center">LE MIGLIORI OCCASIONI LE TROVI SOLO NELL&apos;ONLINE STORE EUROSPIN</p>
             </div>
             <div className="w-3/4 mx-auto p-6 flex items-center space-x-4">
-              <ItemCard image="/ariete.jpg" category="elettrodomestici" name="Ariete Piastra elettrica" price={42.99} setCartItems={setCartItems} />
-              <ItemCard image="/asciugatrice.jpg" category="elettrodomestici" name="Hoover asciugatrice 10kg" price={449.99} setCartItems={setCartItems} />
-              <ItemCard image="/borsa-frigo.jpg" category="tempo-libero" name="Borsa frigo 10L termica" price={9.99} setCartItems={setCartItems} />
-              <ItemCard image="/majestic.jpg" category="elettronica" name="Majestic telefono skid" price={39.99} setCartItems={setCartItems} />
+              <ItemCard image="/pomodori.jpeg" category="food" name="Pomodori" price={4.99} setCartItems={setCartItems} />
+              <ItemCard image="/banane.jpeg" category="food" name="Banane" price={2.99} setCartItems={setCartItems} />
+              <ItemCard image="/finocchi.jpeg" category="food" name="Finocchi" price={3.99} setCartItems={setCartItems} />
+              <ItemCard image="/kiwi.jpeg" category="food" name="Kiwi" price={3.99} setCartItems={setCartItems} />
             </div>
             <div className="w-3/4 mx-auto p-6 flex items-center space-x-4">
-              <ItemCard image="/parigi.jpeg" category="viaggi" name="10 giorni a Parigi (x2)" price={999.99} setCartItems={setCartItems} />
-              <ItemCard image="/compressore.webp" category="fai-da-te" name="Compressore 1.5 KW" price={119.99} setCartItems={setCartItems} />
-              <ItemCard image="/penisola.jpg" category="arredamento" name="Penisola da cucina" price={149.99} setCartItems={setCartItems} />
-              <ItemCard image="/carta.jpg" category="arredamento" name="Porta carta igienica" price={14.99} setCartItems={setCartItems} />
+              <ItemCard image="/lamponi.jpeg" category="food" name="Lamponi" price={4.99} setCartItems={setCartItems} />
+              <ItemCard image="/melanzane.jpeg" category="food" name="Melanzane" price={2.99} setCartItems={setCartItems} />
+              <ItemCard image="/peperoni.jpeg" category="food" name="Peperoni" price={3.99} setCartItems={setCartItems} />
+              <ItemCard image="/zucchine.jpeg" category="food" name="Zucchine" price={2.99} setCartItems={setCartItems} />
             </div>
           </>)}
         {nftModal}
