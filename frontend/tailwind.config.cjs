@@ -8,6 +8,7 @@ module.exports = {
         background: '#F2F2F2',
         accent: '#FFC200'
       },
+      
       fontFamily: {
         'pacifico': ['Pacifico', 'cursive'],
         'montserrat': ['Montserrat', 'cursive'],
