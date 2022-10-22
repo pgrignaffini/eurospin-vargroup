@@ -17,7 +17,7 @@ function ItemCard({ image, name, price, setCartItems }: Props) {
                 <p className='font-poppins text-4xl mt-4 text-primary text-center'>{price}€</p>
             </div>
             <div className='absolute opacity-0 group-hover:opacity-80 transition duration-300 ease-in-out
-            group-hover:bg-transparent w-60 h-80 z-0'>
+            group-hover:bg-transparent h-full w-full m-auto z-0'>
                 <div className='flex items-center justify-center h-full'>
                     {!added ? <button className='p-3 font-poppins text-md bg-primary text-white rounded-md'
                         onClick={() => {
