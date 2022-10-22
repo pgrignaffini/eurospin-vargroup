@@ -12,6 +12,7 @@ import { Alchemy, Network } from "alchemy-sdk";
 import { AppWrapper } from "../context/AppContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { InjectedConnector } from 'wagmi/connectors/injected'
 
 const config = {
   apiKey: process.env.ALCHEMY_API_KEY,
@@ -20,13 +21,13 @@ const config = {
 
 const alchemy = new Alchemy(config);
 
-const { provider } = configureChains([chain.polygonMumbai], [
+const { provider, chains } = configureChains([chain.polygonMumbai], [
   alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
   publicProvider(),
 ])
 
 const client = createClient({
-  autoConnect: true,
+  connectors: [new InjectedConnector({ chains })],
   provider
 })
 

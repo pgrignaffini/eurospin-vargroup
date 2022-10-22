@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 import React from "react";
 import type { Item, NFTItem } from "../types/types";
 import NFT from "../components/NFT";
-import { usePrepareContractWrite, useContractWrite, useAccount, useWaitForTransaction } from 'wagmi'
+import { usePrepareContractWrite, useContractWrite, useAccount, useWaitForTransaction, useSwitchNetwork, chain, useNetwork } from 'wagmi'
 import SpinTokenABI from "../../../contracts/abi/spintoken.json"
 import { tokenAddress, nftAddress, NFTs } from "../utils/constants";
 import { Ring } from "@uiball/loaders"
@@ -38,7 +38,8 @@ const Home: NextPage = () => {
   const [selectedCatalogueItem, setSelectedCatalogueItem] = React.useState<Item | null>(null);
   const [selectedDiscount, setSelectedDiscount] = React.useState<OwnedNft | null>(null)
   const [selectedDiscountItem, setSelectedDiscountItem] = React.useState<NFTItem | null>(null)
-
+  const { switchNetwork } = useSwitchNetwork()
+  const { chain: connectedChain } = useNetwork()
   const { address } = useAccount();
 
   const total = (cartItems.reduce((acc, item) => acc + item.price, 0)).toFixed(2)
@@ -46,6 +47,10 @@ const Home: NextPage = () => {
   const cashback = (parseInt(total) / 10).toFixed(0) ?? 0
 
   const { alchemySdk } = useAppContext()
+
+  React.useEffect(() => {
+    switchNetwork?.(chain.polygonMumbai.id)
+  }, [connectedChain])
 
   const getNFTs = async () => {
     const response = await alchemySdk.nft.getNftsForOwner(address as string)
