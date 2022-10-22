@@ -41,7 +41,7 @@ const Home: NextPage = () => {
 
   const { address } = useAccount();
 
-  let total = (cartItems.reduce((acc, item) => acc + item.price, 0)).toFixed(2)
+  const total = (cartItems.reduce((acc, item) => acc + item.price, 0)).toFixed(2)
   const [discountPrice, setDiscountPrice] = React.useState('-1')
   const cashback = (parseInt(total) / 10).toFixed(0) ?? 0
 
@@ -259,7 +259,7 @@ const Home: NextPage = () => {
         {
           selectedTab === 'marketplace' && (
             <div className="w-3/4 mx-auto mt-8">
-              <p className="text-2xl my-8 font-poppins font-semibold text-primary text-center">Dai un'occhiata ai nostri sconti intelligenti</p>
+              <p className="text-2xl my-8 font-poppins font-semibold text-primary text-center">Dai un&apos;occhiata ai nostri sconti intelligenti</p>
               <div className="grid grid-cols-4 gap-12">
                 {
                   NFTs.map((item, index) => (

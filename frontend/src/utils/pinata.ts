@@ -3,8 +3,8 @@ const key = process.env.NEXT_PUBLIC_PINATA_KEY;
 const secret = process.env.NEXT_PUBLIC_PINATA_SECRET;
 const jwt = process.env.NEXT_PUBLIC_PINATA_JWT;
 
-const axios = require('axios');
-const FormData = require('form-data');
+import axios from 'axios';
+import FormData from 'form-data';
 
 export const uploadJSONToIPFS = async (JSONBody: { name: string; description: string | undefined; image: string; }) => {
 
@@ -16,7 +16,7 @@ export const uploadJSONToIPFS = async (JSONBody: { name: string; description: st
         }
     })
 
-    var config = {
+    const res = await axios({
         method: 'post',
         url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
         headers: {
@@ -24,28 +24,25 @@ export const uploadJSONToIPFS = async (JSONBody: { name: string; description: st
             'Authorization': `Bearer ${jwt}`
         },
         data: data
-    };
+    })
 
-    const res = await axios(config);
     return res
 };
 
 export const uploadFileToIPFS = async (file: any) => {
     //making axios POST request to Pinata ⬇️
-    let data = new FormData();
+    const data = new FormData();
 
     data.append('file', file);
 
-    var config = {
+    const res = await axios({
         method: 'post',
         url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
         headers: {
             'Authorization': `Bearer ${jwt}`,
         },
         data: data
-    };
-
-    const res = await axios(config);
+    });
     console.log(res.data);
     return res.data;
 };

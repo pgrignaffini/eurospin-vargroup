@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import React from 'react'
+import React, { useState } from 'react'
 import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import Banner from '../components/Banner';
 import Footer from '../components/Footer';
@@ -11,27 +11,16 @@ import { nftAddress, tokenAddress } from '../utils/constants';
 import SpinTokenABI from "../../../contracts/abi/spintoken.json"
 import Ring from '@uiball/loaders/dist/components/Ring';
 
-
-
 const Header = dynamic(
   () => import('../components/Header'),
   { ssr: false }
 )
 
-const Menu = dynamic(
-  () => import('../components/Menu'),
-  { ssr: false }
-)
+function ProductDetails() {
 
-
-
-function productDetails() {
-
-  const [cartItems, setCartItems] = React.useState(Array<Item>());
-  const [selectedTab, setSelectedTab] = React.useState('home');
+  const [cartItems, setCartItems] = useState(Array<Item>());
+  const [selectedTab, setSelectedTab] = useState('home');
   const { address } = useAccount();
-
-
 
   const { config, isSuccess: succ, isError, isLoading: load } = usePrepareContractWrite({
     addressOrName: tokenAddress,
@@ -103,4 +92,4 @@ function productDetails() {
   );
 }
 
-export default productDetails;
+export default ProductDetails;
